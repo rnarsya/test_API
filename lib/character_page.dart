@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'character_model.dart';
 import 'detail_characters.dart';
+import 'base_network.dart';
 
 class PageListCharacters extends StatefulWidget {
   const PageListCharacters({Key? key}) : super(key: key);
@@ -31,7 +32,8 @@ class _PageListCharactersState extends State<PageListCharacters> {
       padding: EdgeInsets.all(16.0),
       child: FutureBuilder(
         future: loadCharacters(),
-        builder: (BuildContext context, AsyncSnapshot<List<CharactersHP>> snapshot) {
+        builder:
+            (BuildContext context, AsyncSnapshot<List<CharactersHP>> snapshot) {
           if (snapshot.hasError) {
             return _buildErrorSection();
           }
@@ -136,9 +138,13 @@ class CharacterItem extends StatelessWidget {
 }
 
 Future<List<CharactersHP>> loadCharacters() async {
-  // Implement your logic to fetch characters here
-  // For example:
-  // final response = await yourApiCall();
-  // return response.data.characters;
-  return [];
+  try {
+    var data = await BaseNetwork.fetchData('/characters');
+    List<CharactersHP> charactersList =
+        (data as List).map((item) => CharactersHP.fromJson(item)).toList();
+    return charactersList;
+  } catch (e) {
+    print(e.toString());
+    return [];
+  }
 }

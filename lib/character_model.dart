@@ -46,7 +46,9 @@ class CharactersHP {
   CharactersHP.fromJson(Map<String, dynamic> json) {
     id = json['id'] as String?;
     name = json['name'] as String?;
-    alternateNames = (json['alternate_names'] as List?)?.map((dynamic e) => e as String).toList();
+    alternateNames = (json['alternate_names'] as List?)
+        ?.map((dynamic e) => e as String)
+        .toList();
     species = json['species'] as String?;
     gender = json['gender'] as String?;
     house = json['house'] as String?;
@@ -56,7 +58,9 @@ class CharactersHP {
     ancestry = json['ancestry'] as String?;
     eyeColour = json['eyeColour'] as String?;
     hairColour = json['hairColour'] as String?;
-    wand = (json['wand'] as Map<String,dynamic>?) != null ? Wand.fromJson(json['wand'] as Map<String,dynamic>) : null;
+    wand = (json['wand'] as Map<String, dynamic>?) != null
+        ? Wand.fromJson(json['wand'] as Map<String, dynamic>)
+        : null;
     patronus = json['patronus'] as String?;
     hogwartsStudent = json['hogwartsStudent'] as bool?;
     hogwartsStaff = json['hogwartsStaff'] as bool?;
@@ -106,7 +110,11 @@ class Wand {
   Wand.fromJson(Map<String, dynamic> json) {
     wood = json['wood'] as String?;
     core = json['core'] as String?;
-    length = json['length'] as int?;
+    if (json['length'] is int) {
+      length = json['length'] as int?;
+    } else if (json['length'] is double) {
+      length = (json['length'] as double?)?.toInt();
+    }
   }
 
   Map<String, dynamic> toJson() {

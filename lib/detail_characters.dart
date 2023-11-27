@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'character_model.dart';
 
 class PageDetailCharacters extends StatelessWidget {
@@ -19,7 +18,10 @@ class PageDetailCharacters extends StatelessWidget {
           ),
         ),
       ),
-      body: _buildCharacterDetails(),
+      body: SingleChildScrollView(
+        // Menambahkan SingleChildScrollView
+        child: _buildCharacterDetails(),
+      ),
     );
   }
 
@@ -29,49 +31,50 @@ class PageDetailCharacters extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildDetailItem("Name", character.name),
-          _buildDetailItem("Species", character.species),
-          _buildDetailItem("Gender", character.gender),
-          _buildDetailItem("House", character.house),
-          _buildDetailItem("Date of Birth", character.dateOfBirth),
-          _buildDetailItem("Wizard", character.wizard?.toString() ?? ''),
-          _buildDetailItem("Ancestry", character.ancestry),
-          _buildDetailItem("Eye Colour", character.eyeColour),
-          _buildDetailItem("Hair Colour", character.hairColour),
-          _buildDetailItem("Wand", _buildWandDetails(character.wand) as String?),
-          _buildDetailItem("Patronus", character.patronus),
-          _buildDetailItem("Hogwarts Student", character.hogwartsStudent?.toString() ?? ''),
-          _buildDetailItem("Hogwarts Staff", character.hogwartsStaff?.toString() ?? ''),
-          _buildDetailItem("Actor", character.actor),
-          _buildDetailItem("Alternate Actors", character.alternateActors?.join(', ')),
-          _buildDetailItem("Alive", character.alive?.toString() ?? ''),
-          _buildDetailItem("Image", _buildCharacterImage(character.image) as String?),
+          _buildDetailItem("Name", Text(character.name ?? 'N/A')),
+          _buildDetailItem("Species", Text(character.species ?? 'N/A')),
+          _buildDetailItem("Gender", Text(character.gender ?? 'N/A')),
+          _buildDetailItem("House", Text(character.house ?? 'N/A')),
+          _buildDetailItem(
+              "Date of Birth", Text(character.dateOfBirth ?? 'N/A')),
+          _buildDetailItem(
+              "Wizard", Text(character.wizard?.toString() ?? 'N/A')),
+          _buildDetailItem("Ancestry", Text(character.ancestry ?? 'N/A')),
+          _buildDetailItem("Eye Colour", Text(character.eyeColour ?? 'N/A')),
+          _buildDetailItem("Hair Colour", Text(character.hairColour ?? 'N/A')),
+          _buildDetailItem("Wand", _buildWandDetails(character.wand)),
+          _buildDetailItem("Patronus", Text(character.patronus ?? 'N/A')),
+          _buildDetailItem("Hogwarts Student",
+              Text(character.hogwartsStudent?.toString() ?? 'N/A')),
+          _buildDetailItem("Hogwarts Staff",
+              Text(character.hogwartsStaff?.toString() ?? 'N/A')),
+          _buildDetailItem("Actor", Text(character.actor ?? 'N/A')),
+          _buildDetailItem("Alternate Actors",
+              Text(character.alternateActors?.join(', ') ?? 'N/A')),
+          _buildDetailItem("Alive", Text(character.alive?.toString() ?? 'N/A')),
+          _buildDetailItem("Image", _buildCharacterImage(character.image)),
         ],
       ),
     );
   }
 
-  Widget _buildDetailItem(String label, String? value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "$label:",
-          style: TextStyle(
-            fontSize: 16.0,
-            fontWeight: FontWeight.bold,
+  Widget _buildDetailItem(String label, Widget detailWidget) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "$label:",
+            style: TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        SizedBox(height: 8.0),
-        Text(
-          value ?? 'N/A',
-          style: TextStyle(
-            fontSize: 14.0,
-            color: Colors.grey,
-          ),
-        ),
-        SizedBox(height: 16.0),
-      ],
+          SizedBox(height: 8.0),
+          detailWidget,
+        ],
+      ),
     );
   }
 
@@ -115,13 +118,21 @@ class PageDetailCharacters extends StatelessWidget {
   }
 
   Widget _buildCharacterImage(String? imageUrl) {
-    return Container(
-      width: 200,
-      height: 200,
-      child: Image.network(
-        imageUrl ?? '',
+    if (imageUrl != null && imageUrl.isNotEmpty) {
+      return Image.network(
+        imageUrl,
+        width: 200,
+        height: 200,
         fit: BoxFit.cover,
-      ),
-    );
+      );
+    } else {
+      return Text(
+        "No image available",
+        style: TextStyle(
+          fontSize: 14.0,
+          color: Colors.grey,
+        ),
+      );
+    }
   }
 }

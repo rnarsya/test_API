@@ -36,7 +36,10 @@ class _CurrencyConversionPageState extends State<CurrencyConversionPage> {
                   .map<DropdownMenuItem<String>>(
                     (String value) => DropdownMenuItem<String>(
                   value: value,
-                  child: Text(value),
+                  child: Text(
+                    value,
+                    style: TextStyle(color: Colors.white), // Ubah warna dropdown item menjadi putih
+                  ),
                 ),
               )
                   .toList(),

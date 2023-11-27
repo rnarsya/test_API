@@ -8,72 +8,66 @@ class TimeConversionPage extends StatefulWidget {
 }
 
 class _TimeConversionPageState extends State<TimeConversionPage> {
-  TextEditingController _hoursController = TextEditingController();
-  double _result = 0.0;
+  DateTime _currentTime = DateTime.now();
+
+  String _formatTime(DateTime time, String timeZone) {
+    return "${time.toLocal()} ($timeZone)";
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Konversi Waktu'),
+        title: Text('Time Conversion'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextField(
-              controller: _hoursController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Masukkan Jam'),
+            Text(
+              'Waktu Sekarang:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            Text(
+              _formatTime(_currentTime, 'WIB'),
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 10),
+            Text(
+              _formatTime(_currentTime, 'WITA'),
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 10),
+            Text(
+              _formatTime(_currentTime, 'WIT'),
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 10),
+            Text(
+              _formatTime(_currentTime.toUtc(), 'London GMT'),
+              style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _convertTime,
-              child: Text('Konversi'),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Hasil Konversi: $_result Menit',
-              style: TextStyle(fontSize: 18),
+              onPressed: () {
+                setState(() {
+                  _currentTime = DateTime.now();
+                });
+              },
+              child: Text('Refresh Waktu'),
             ),
           ],
         ),
       ),
     );
   }
-
-  void _convertTime() {
-    try {
-      double hours = double.parse(_hoursController.text);
-      double minutes = hours * 60;
-      setState(() {
-        _result = minutes;
-      });
-    } catch (e) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('Error'),
-            content: Text('Masukkan jam dengan format yang benar'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-    }
-  }
 }
 
 void main() {
-  runApp(MaterialApp(
-    home: TimeConversionPage(),
-  ));
+  runApp(
+    MaterialApp(
+      home: TimeConversionPage(),
+    ),
+  );
 }
